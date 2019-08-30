@@ -1,3 +1,14 @@
+function rasterize(image, width, height, callbackFunction) {
+    let newImage = new Array(width);
+    for (let x = 0; x < width; x++) {
+        newImage[x] = new Array(height);
+        for (let y = 0; y < height; y++) {
+            callbackFunction(newImage, image, x, y);
+        }
+    }
+    return newImage;
+}
+
 function generateCheckerboardAsArray(width, height) {
     let buffer = new Array(width);
     for (let x = 0; x < height; x++) {
@@ -83,36 +94,27 @@ function generateRGB(x, y) {
 
 function writeImage(width, height, imageData, imageId) {
     let myImage = document.getElementById(imageId);
-    // create off-screen canvas element
     let canvas = document.createElement('canvas');
     let context = canvas.getContext('2d');
     canvas.width = width;
     canvas.height = height;
-    // create imageData object
-    let idata = context.createImageData(width, height);
-    // set our buffer as source
-    idata.data.set(imageData);
-    // update canvas with new data
-    context.putImageData(idata, 0, 0);
+    let canvasImageData = context.createImageData(width, height);
+    canvasImageData.data.set(imageData);
+    context.putImageData(canvasImageData, 0, 0);
     myImage.src = canvas.toDataURL()
 }
 
 function getGrayScaleImage(image) {
     let width = image.length;
     let height = image[0].length;
-    let newImage = new Array(width);
-    for (let x = 0; x < height; x++) {
-        newImage[x] = new Array(height);
-        for (let y = 0; y < width; y++) {
-            if (image[x][y] instanceof Array) {
-                newImage[x][y] = (image[x][y][0] + image[x][y][1] + image[x][y][2]) / 3;
-            }
-            else {
-                newImage[x][y] = image[x][y];
-            }
+    return rasterize(image, width, height, (newImage, originalImage, x, y) => {
+        if (image[x][y] instanceof Array) {
+            newImage[x][y] = (image[x][y][0] + image[x][y][1] + image[x][y][2]) / 3;
         }
-    }
-    return newImage;
+        else {
+            newImage[x][y] = image[x][y];
+        }
+    });
 }
 
 function convertGrayScaleToRgb(image) {

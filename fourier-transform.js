@@ -39,29 +39,19 @@ function magnitudeCalc(real, imaginary) {
 function getMagnitudes(complexImage) {
     let width = complexImage.length;
     let height = complexImage[0].length;
-    let newImage = new Array(width);
-    for (let x = 0; x < width; x++) {
-        newImage[x] = new Array(height);
-        for (let y = 0; y < height; y++) {
-            let complexNumber = complexImage[x][y];
-            newImage[x][y] = magnitudeCalc(complexNumber.real, complexNumber.imaginary)
-        }
-    }
-    return newImage;
+    return rasterize(complexImage, width, height, (newImage, originalImage, x, y) => {
+        let complexNumber = complexImage[x][y];
+        newImage[x][y] = magnitudeCalc(complexNumber.real, complexNumber.imaginary)
+    });
 }
 
 function getPhase(complexImage) {
     let width = complexImage.length;
     let height = complexImage[0].length;
-    let newImage = new Array(width);
-    for (let x = 0; x < width; x++) {
-        newImage[x] = new Array(height);
-        for (let y = 0; y < height; y++) {
-            let complexNumber = complexImage[x][y];
-            newImage[x][y] = Math.abs(Math.atan2(complexNumber.imaginary, complexNumber.real)) * 255;
-        }
-    }
-    return newImage;
+    return rasterize(complexImage, width, height, (newImage, originalImage, x, y) => {
+        let complexNumber = complexImage[x][y];
+        newImage[x][y] = Math.abs(Math.atan2(complexNumber.imaginary, complexNumber.real)) * 255;
+    });
 }
 
 function generate2dArray(size) {
@@ -79,16 +69,11 @@ function do180RotationForEachQuadrant(image) {
     let width = image.length;
     let height = image[0].length;
     let n = width;
-    let newImage = generate2dArray(width);
-    for (let x = 0; x < width; x++) {
-        newImage[x] = new Array(height);
-        for (let y = 0; y < height; y++) {
-            let xPrime = Math.floor((x + n / 2) % n);
-            let yPrime = Math.floor((y + n / 2) % n);
-            newImage[x][y] = image[xPrime][yPrime]
-        }
-    }
-    return newImage;
+    return rasterize(image, width, height, (newImage, originalImage, x, y) => {
+        let xPrime = Math.floor((x + n / 2) % n);
+        let yPrime = Math.floor((y + n / 2) % n);
+        newImage[x][y] = image[xPrime][yPrime]
+    });
 }
 
 function inverseDiscreteFourierTransform(complexImage, u, v) {
@@ -113,15 +98,10 @@ function inverseDiscreteFourierTransform(complexImage, u, v) {
 function doInverseDiscreteFourierTransform(complexImage) {
     let width = complexImage.length;
     let height = complexImage[0].length;
-    let newImage = new Array(width);
-    for (let x = 0; x < width; x++) {
-        newImage[x] = new Array(height);
-        for (let y = 0; y < height; y++) {
-            newImage[x][y] = inverseDiscreteFourierTransform(complexImage, x, y);
-            console.log(`Finished pixel(${x}, ${y})`)
-        }
-    }
-    return newImage;
+    return rasterize(complexImage, width, height, (newImage, originalImage, x, y) => {
+        newImage[x][y] = inverseDiscreteFourierTransform(complexImage, x, y);
+        console.log(`Finished pixel(${x}, ${y})`)
+    });
 }
 
 
@@ -130,19 +110,19 @@ function doLogarithmicScaling(pixel, scaleConstant) {
 }
 
 function calculateLogarithmicConstant(max) {
-    return  255 / Math.log10(1 + max);
+    return 255 / Math.log10(1 + max);
 }
 
-// MUTATES ARRAY, BE CAREFUL
 function doMagnitudeScaling(magnitudes) {
-    let n = magnitudes.length;
-    let maxRow = magnitudes.map(function(row){ return Math.max.apply(Math, row); });
+    let width = magnitudes.length;
+    let height = magnitudes[0].length;
+    let maxRow = magnitudes.map(function (row) {
+        return Math.max.apply(Math, row);
+    });
     let max = Math.max.apply(null, maxRow);
     let c = calculateLogarithmicConstant(max);
-    for (let x = 0; x < n; x++) {
-        for (let y = 0; y < n; y++) {
-            magnitudes[x][y] = doLogarithmicScaling(magnitudes[x][y], c);
-        }
-    }
-    return magnitudes;
+    return rasterize(magnitudes, width, height, (newImage, originalImage, x, y) => {
+        newImage[x][y] = doLogarithmicScaling(magnitudes[x][y], c);
+        console.log(`Finished pixel(${x}, ${y})`)
+    });
 }
