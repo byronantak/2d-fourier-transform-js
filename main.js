@@ -19,7 +19,6 @@
 	var fourierMagnitudesClampedRotated = convertToClampedArray(convertGrayScaleToRgb(fourierMagnitudesRotated));
 	writeImage(width, height, fourierMagnitudesClampedRotated, 'img-display-ft-rotated');
 
-	debugger
 	var phaseFourierResult = getPhase(fourierTransformImage);
 	var phaseFourierResultClamped = convertToClampedArray(convertGrayScaleToRgb(phaseFourierResult));
 	writeImage(width, height, phaseFourierResultClamped, 'img-display-ft-phase');
