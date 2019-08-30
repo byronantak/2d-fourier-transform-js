@@ -31,24 +31,6 @@ function convertToClampedArray(image) {
     return buffer;
 }
 
-function convertToClampedArray(image) {
-    var width = image.length;
-    var height = image[0].length;
-    buffer = new Uint8ClampedArray(width * height * 4); 
-    for(var y = 0; y < height; y++) {
-        for(var x = 0; x < width; x++) {
-            var bufferIndex = (y * width + x) * 4;
-            color = generateRGB(x, y)
-             // position in buffer based on x and y
-            buffer[bufferIndex] = image[x][y][0];           // some R value [0, 255]
-            buffer[bufferIndex + 1] = image[x][y][1];           // some G value
-            buffer[bufferIndex + 2] = image[x][y][2];           // some B value
-            buffer[bufferIndex + 3] = 255;           // set alpha channel
-        }
-    }
-    return buffer;
-}
-
 function generateCheckerboardArray(width, height) {
     buffer = new Uint8ClampedArray(width * height * 4); 
     for(var y = 0; y < height; y++) {
