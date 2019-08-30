@@ -1,41 +1,51 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8">
-    <title>title</title>
+    <meta charset='UTF-8'>
+    <title>Fourier Transform Sad Example</title>
   </head>
   <body>
-  	<span>
-  		<h6>Generated Image</h6>
-  		<image id='img-display'></image>
-  	</span>
-  	<span>
-  		<h6>Grayscale Image</h6>
-  		<image id='img-display-gray'></image>
-  	</span>
-  	<span>
-  		<h6>Fourier Transform</h6>
-  		<image id='img-display-ft'></image>
-  	</span>
-  	<span>
-  		<h6>Fourier Transform Rotated</h6>
-  		<image id='img-display-ft-rotated'></image>
-  	</span>
-  	<span>
-  		<h6>Phase Fourier Transform</h6>
-  		<image id='img-display-ft-phase'></image>
-  	</span>
-  	<span>
-  		<h6>Phase Fourier Transform Rotated</h6>
-  		<image id='img-display-ft-phase-rotated'></image>
-  	</span>
-  	<span>
-  		<h6>Inverse Fourier Transform</h6>
-  		<image id='img-display-inverse'></image>
-  	</span>
 
-  	<script type="text/javascript" src="generate-image.js"></script>
-  	<script type="text/javascript" src="fourier-transform.js"></script>
-  	<script type="text/javascript" src="main.js"></script>
+  	<div>
+		<input type='file' onchange='fileUploaded()'><br>
+		<img id='my-img' src='' alt='Image preview...'>
+        <button onclick="transform()">Transform</button>
+	</div>
+
+  	<div>
+		<span>
+			<h6>Generated Image</h6>
+			<img id='img-display'>
+		</span>
+		<span>
+			<h6>Grayscale Image</h6>
+			<img id='img-display-gray'>
+		</span>
+		<span>
+			<h6>Fourier Transform</h6>
+			<img id='img-display-ft'>
+		</span>
+		<span>
+			<h6>Fourier Transform Rotated</h6>
+			<img id='img-display-ft-rotated'>
+		</span>
+		<span>
+			<h6>Phase Fourier Transform</h6>
+			<img id='img-display-ft-phase'>
+		</span>
+		<span>
+			<h6>Phase Fourier Transform Rotated</h6>
+			<img id='img-display-ft-phase-rotated'>
+		</span>
+		<span>
+			<h6>Inverse Fourier Transform</h6>
+			<img id='img-display-inverse'>
+		</span>
+	</div>
+
+
+  	<script type='text/javascript' src='generate-image.js'></script>
+  	<script type='text/javascript' src='fourier-transform.js'></script>
+  	<script type='text/javascript' src='main.js'></script>
   </body>
 </html>
