@@ -53,7 +53,7 @@ function transform() {
     console.log(pixelData);
     let width = pixelData.length;
     let height = pixelData[0].length;
-    if (width != height) {
+    if (width !== height) {
         alert(`Please use a square image. Image provided is ${width} x ${height}`);
     }
     else {
@@ -61,24 +61,13 @@ function transform() {
     }
 }
 
-function generate2dArray(size) {
-    let newImage = new Array(size);
-    for (let x = 0; x < size; x++) {
-        newImage[x] = new Array(size);
-        for (let y = 0; y < size; y++) {
-            newImage[x][y] = 0
-        }
-    }
-    return newImage;
-}
-
 function fixRotationFromClampedArray(array) {
     let width = array.length;
     let height = array[0].length;
-    let rotatedArray = generate2dArray(width)
+    let rotatedArray = generate2dArray(width);
     for (let x = 0; x < height; x++) {
         for (let y = 0; y < width; y++) {
-            rotatedArray[y][x] = array[x][y]// some B value
+            rotatedArray[y][x] = array[x][y]
         }
     }
     return rotatedArray;
@@ -94,6 +83,5 @@ function getPixelData(imageId) {
     canvas.height = height;
     canvas.getContext('2d').drawImage(previewImage, 0, 0, width, height);
     let data = canvas.getContext('2d').getImageData(0, 0, width, height).data;
-    let array = fixRotationFromClampedArray(convertClampedToNormalArray(data, width, height));
-    return array;
+    return fixRotationFromClampedArray(convertClampedToNormalArray(data, width, height));
 }
