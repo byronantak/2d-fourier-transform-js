@@ -1,4 +1,4 @@
-# 2dt-fft-js
+# 2d Fourier Transforms
 
 A javascript implementation for 2d fourier transforms implemented in pure html and js, with no dependencies.
 
